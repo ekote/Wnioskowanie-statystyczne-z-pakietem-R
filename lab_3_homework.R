@@ -80,3 +80,6 @@ przedzial_srednia <- function(dane, poziom_ufnosci){
 
 przedzial_srednia(duration,0.95)
 # [1] 1.492882 5.428745
+t.test(x =duration ,conf.level=0.95)$conf.int
+# [1] 3.330171 3.591457
+ 
