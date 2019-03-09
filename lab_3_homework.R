@@ -66,15 +66,17 @@ plot(duration) # totalnie nie wyglada na rozklad normalny
 hist(duration) 
 # B)
 
-przedzial.var <- function(dane, poziom.ufnosci){
-  n.zero.minus1 <- length(dane)-1
-  licznik <- n.zero.minus1*var(dane)
-  alfa <- 1-poziom.ufnosci
-  lewa <- licznik/qchisq(1-alfa/2,n.zero.minus1)
-  prawa <- licznik/qchisq(alfa/2,n.zero.minus1)
-  return(c(lewa,prawa))
+przedzial_srednia <- function(dane, poziom_ufnosci){
+  n <- length(dane)
+  alfa <- 1-poziom_ufnosci
+  s <- sqrt(var(dane))
+  t_prawy <- n - s/sqrt(n) 
+  t_lewy <- 1-alfa/2
+  t <- qt(t_lewy, t_prawy)
+  x <- mean(dane)
+  
+  return(c(x-t, x+t))
 }
-# b1) przedzia³ ufnosci dla wariancji wagi kóz
-przedzial.var(duration,0.95)
-# [1] 1.129288 1.557763
 
+przedzial_srednia(duration,0.95)
+# [1] 1.492882 5.428745
