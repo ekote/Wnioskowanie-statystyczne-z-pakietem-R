@@ -38,3 +38,43 @@ wzor2 <- qnorm(1-(alfa/2))^2 *p_0*q_0/d^2
 wzor1
 wzor2 # [1] 3636.25
 
+
+
+# 3.4
+# A)
+library(MASS)
+data(geyser)
+attach(geyser)
+
+View(geyser)
+# test shapiro 
+shapiro.test(duration) # W = 0.84352, p-value < 2.2e-16
+# wynik to prawie zero
+
+# p-value <= alfa => odrzucamy hipoteze o
+# p-value > alfa => nie ma podstaw do odrzucenia hipotezy
+# JAKI POZIOM ISTOSTOSCI?
+# przyjmujemy jak w zadaniu z kozami
+# L = 0.05 a u nas p.value bliskie 0
+# Odrzucamy hipoteze => to nie jest rozklad normalny 
+
+qqnorm(duration) # prosta
+qqline(duration) # wykres
+
+# dane nie leza na kresce
+plot(duration) # totalnie nie wyglada na rozklad normalny
+hist(duration) 
+# B)
+
+przedzial.var <- function(dane, poziom.ufnosci){
+  n.zero.minus1 <- length(dane)-1
+  licznik <- n.zero.minus1*var(dane)
+  alfa <- 1-poziom.ufnosci
+  lewa <- licznik/qchisq(1-alfa/2,n.zero.minus1)
+  prawa <- licznik/qchisq(alfa/2,n.zero.minus1)
+  return(c(lewa,prawa))
+}
+# b1) przedzia³ ufnosci dla wariancji wagi kóz
+przedzial.var(duration,0.95)
+# [1] 1.129288 1.557763
+

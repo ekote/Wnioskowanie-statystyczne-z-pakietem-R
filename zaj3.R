@@ -43,7 +43,7 @@ shapiro.test(WeightInitial)
 # p-value <= alfa => odrzucamy hipoteze o
 # p-value > alfa => nie ma podstaw do odrzucenia hipotezy
 # L = 0.05 a u nas p.value 0.1 
-# odrzucamy H0 
+# odrzucamy H0 -> H1 przyjmujemy -> nie jest normalny rozklad
 
 # inna metoda sprawdzenia normalnosci na "na oko"
 # wykres kwanylowy (normalnosci, kwatnyl-kwantyl)
