@@ -24,10 +24,17 @@ wzor2 <- (qnorm(1 -(alfa/2)))^2 * 1/4*d^2
 wzor1 # [1] 19.98321
 wzor2 # [1] 0.0006002279 - to na pewno nie. Nie ma sensu.
 
+# te na gorze sa zle - dlatego tutaj dobre wzory
+wzor3 <- (qnorm(1 -(alfa/2)))^2 * (1/(4*d^2))
+# co jest równoważne:
+wzor4 <- ((qnorm(1 -(alfa/2))) * (1/(2*d)))^2
+
+
+
 # 3.9
 d <- 0.01
 alfa <- 1-0.9
-p_0 <- 0.16 # 16 % nie zapina pas�w
+p_0 <- 0.16 # 16 % nie zapina pasów
 q_0 <- 1 - p_0 # q_0 - zapinajacy pasy
 q_0
 # Model IV wzor 1
@@ -37,6 +44,7 @@ wzor1 <- (qnorm(1-(alfa/2)* p_0 * q_0 / d^2))^2
 wzor2 <- qnorm(1-(alfa/2))^2 *p_0*q_0/d^2
 wzor1
 wzor2 # [1] 3636.25
+
 
 
 
@@ -57,6 +65,23 @@ shapiro.test(duration) # W = 0.84352, p-value < 2.2e-16
 # przyjmujemy jak w zadaniu z kozami
 # L = 0.05 a u nas p.value bliskie 0
 # Odrzucamy hipoteze => to nie jest rozklad normalny 
+
+# Wiadomosc od prowadzacej
+# Wniosek, że dane nie pochodzą z rozkładu normalnego jest poprawny (proszę
+# zwrócić uwagę na fakt, że wniosek ten będzie taki sam dla każdego
+# rozsądnie przyjętego poziomu istotności - za poziom istotności przyjmuje
+# się liczby rzędu 0.01 lub 0.1, najczęściej używane to 0.05).
+
+# Zatem formalnie nie mają Państwo podstaw do korzystania z MODELU II.
+# Trzeba wybrać inny model!
+# Ale nawet gdyby model II tu pasował, to źle go Państwo zaimplementowali.
+# Proszę popatrzeć uważnie na wzór. Kwantyl t ma dwa indeksy: 1-(alfa/2)
+# oraz n-1. Następnie kwantyl ten jest mnożony przez s/sqrt(n).
+
+# Ciekawostką jest że używając modelu II i tego, który tu rzeczywiście
+# pasuje, otrzymają Państwo zbliżone wyniki. Na zajęciach zastanowimy się
+# dlaczego tak się dzieje.
+
 
 qqnorm(duration) # prosta
 qqline(duration) # wykres
