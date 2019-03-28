@@ -164,7 +164,7 @@ shapiro.test(ptaki)
 # alfa = 0.05
 
 # b)
-# H_0: m = 5.2
+# H_0: m = 5.2 
 # H_1: m < 5.2
 # X - waga.ptakow
 # x = N(m,sigma): m i sigma sa nieznane
@@ -183,3 +183,149 @@ power.t.test(n=10, delta=0.05, sd=sd(ptaki), type="one.sample", alternative="one
 # P = 0.2830938
 
 # Do domy 4.2 (d2), 4.3 (c), 4.4, 4.6, skończyć 4.7
+
+
+################## zad 4.2 - d2 ###############
+
+kozy <- read.table('https://www.mini.pw.edu.pl/~dembinsk/www/?download=goats.txt', header=T)
+head(kozy)
+
+# X - waga kozy
+# X ~ N(mi, sigma) gdzie mi i sigma są nieznane
+
+# H_0 - sigma = 3 kg (sigma^2 = 9 kg^2)
+# H_1 - sigma > 3 kg  (sigma^2 > 9 kg^2)
+
+ch.kwadrat <- (length(kozy$WeightInitial)-1)*var(kozy$WeightInitial)/9
+ch.kwadrat # 52.78889
+
+qchisq(1-0.1, length(kozy$WeightInitial)-1)
+# zbiór krytyczny w = (50.65977, nieskończoność)
+# 52.78889 należy do W -> odrzucamy H_0)
+# Można przyjąć na poziomie istotności 0.1, że odchylenie standardowe
+# wagi młodych kóz przekracza 3 kg
+
+###################### Zad 4.3 c ###################
+# test = mowa o teście z punktu A (i stąd bierzemy też H_0) 
+opony = c(51600, 45400, 49800, 52100, 46500, 47800, 49700, 50900, 44000)
+# x - przebieg opon
+# X = N(u, sigma), gdzie m oraz sigma sa nieznane
+
+# szukamy n - ilości pomiarów
+# n - poszukiwana liczba pomiarów
+# P(Odrzucamy H_0 | m = 48000) = moc.testu(m=48000)>=0.9
+
+# definicja mocy testy (parametr teta) - prawdopodobieństwo odrzucenia H_0 pod warunkiem teta
+# kod Rowy wymaga oczywiście więcej parametrów
+
+m <- ceiling(power.t.test(delta = 2000, sd = sd(opony),
+                         sig.level = 0.05, type = "one.sample", alternative = "one.sided", power = 0.9)$n)
+m
+# n = 19
+# Uwaga, jeśli zapomnimy o type = "one.sample" otrzymujemy 36 (zły wynik)
+
+
+#################### Zad 4.7 c #####################
+
+# H_0: m = 5.2 (średnia waga)
+# H_1: m < 5.2
+# zakładamy, że m = 5.15 kg
+# P(przyjmiemy H_1 | m = 5.15) = P{odrzucenia H_0 | m = 5.15} =
+# moc.testu (m = 5.15)
+# delta = 5.2 - 5.15
+power.t.test(n=length(ptaki), delta=0.05, sd = sd(ptaki), type="one.sample", sig.level = 0.05,
+             alternative = "one.sided")
+
+# power 0.2830938
+
+# d)
+# Ile by musiała wynosić średnia waga ptaków tego gatunku by test z pkt. (b) z prawdopodobieństwem
+# 0,8, na poziomie istotności 0.05, przyjmował hipotezę, że średnia waga jest mniejsza niż 5.20 kg.
+
+# H_0 = 5.2
+# H_1 = 5.2
+
+# szukamy m (tj. średniej), takiej że P(przyjmiemy H1 | m = ?) = 0.8
+delta <- power.t.test(n = length(ptaki), sd = sd(ptaki),
+             type="one.sample", sig.level = 0.05, 
+             alternative = "one.sided", power = 0.8)$delta
+
+# delta = 0.1164867
+# 5.2 - delta 
+# srednia waga powinna wynosić 5.2 - delta = 5.083513
+
+
+# e)
+# Zakładamy, że m = m1 = 5.15 kg
+# szukamy n=?, takiego że P(odrzucimy H_0 | m = 5.15 kg) > 0.8
+# moc.testu(5.15) > 0.8
+delta <- power.t.test(delta = 0.05, sd = sd(ptaki),
+                      type="one.sample", sig.level = 0.05, 
+                      alternative = "one.sided", power = 0.8)$n
+ceiling(delta)
+# odp -> trzeba przyjąc 48 pomiarów
+# Zauważ, że wzór jak we cześniejszym, tyle że znane jest delta, a szukane n
+
+# f)
+# H_0: sigma^2 = sigma0^2, sigma0 = 0.2
+# H_1: sigma^2 != sigma0^2
+alfa = 0.05
+n = 10 # ptaków
+s2 = var(ptaki)
+sigma0 = 0.2
+# W = (0, x2(alfa/2,n-1) > U < x2(1-alfa/2, n-1, +INF) (z tablic)
+# statystyka testowa (z tablic)
+ch.kwadrat = (n - 1) * s2 / (sigma0^2) # ~4.2
+lewa = qchisq(alfa/2,n-1) # = 2.7
+prawa = qchisq(1-alfa/2,n-1) # = 19.02
+
+# w = (0, 2.7> U <19.02, INF)
+# statystyka testowa (4.2) nie należy do W
+# zatem nie ma podstaw do odrzucenia H0 na tym poziomie istotności
+# przyjmujemy zatem, że odchylenie std. wagi ptaków wynosi 0.2 kg
+
+# Zadanie 4.4
+# wgranie biblioteki faraway z poziomu konsoli: install.packages("faraway") 
+library(faraway)
+data("uswages")
+attach(uswages)
+
+uswages
+
+# b)
+# x - tygodniowy dochód
+
+length(wage)
+# Mamy 2000 obserwacji, zatem próba jest duża, zatem możemy
+# wykorzystać test t-studenta
+
+# H_0: m = 600
+# H_1: m > 600
+# gdzie m - oznacza średni tygodniowy dochód
+
+?t.test
+t.test(wage, alternative = "greater", mu = 600)
+
+# p-value = 0.215
+# zatem nie ma podstaw do odrzucenia H_0, czyli możemy stwierdzić,
+# że średni tygodniowy dochód przekracza 600 dolarów
+
+# 4.4 c)
+# P(przyjmiemy H_0 z punktu b | m = 610) = 1 - P (odrzucenie H_0 | m = 610)=1-moc_testu(610)
+1 - power.t.test(n=2000, delta=10, sd=sd(wage), type='one.sample', alternative='one.sided')$power
+# = 0.7494072
+# 74.94% - duże prawdopodobieństwo błędu
+
+# 4.4 d)
+# Ile musiałby wynosić średni tygodniowy dochód mężczyzn pracuja̧cych w USA w 1988 roku, aby
+# test z pkt. (b) z prawdopodobieństwem 0,8 przyjmowa l hipotezę, że badany średni dochód jest większy
+# niż 600 $?
+
+# H_0 - średni dochód m = 600 $
+# H_1 - średni dochód m > 600 $
+# Chcemy wyznaczyć wartość m = m1, przy której z P(H_1 jest prawdziwa) = 0.8
+# tożsame z P(odrzucamy H0 | m = m1) = 0.8, moc.testu(power = 0.8)
+
+# będziemy kończyć 4.4 d) w przyszłym tygodniu
+# Do domu zad 4.6, ewentualnie inne zadania z kartki 4
+
