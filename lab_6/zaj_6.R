@@ -105,7 +105,7 @@ p-value = 0.5138 > alfa = 0.06
 
 
 
-############################ Testy dla dwóch populacji ##########################
+############################ Testy dla dwóch populacji - 5.3 ##########################
 domy <- read.table('http://www.mini.pw.edu.pl/~dembinsk/www/?download=domy.txt', header=T)
 attach(domy)
 domy
@@ -145,3 +145,19 @@ power.t.test(n=12, delta=50, sd=sd(domE-domS), type="paired", alternative="one.s
 # m1_E - mi_S = 50 wynosi 0.84
 
 # Do domu: 5.4, 5.8 (podobne, też z parami)
+przyrzadA = c(144,165,125,149,128,159)
+przyrzadB = c(147,167,124,152,127,160)
+
+mean(przyrzadA)
+# 145
+mean(przyrzadB)
+# 146,16
+
+# H0 : uA > uB
+# H1 : uA = UB
+
+
+t.test(x=przyrzadA, y=przyrzadB, alternative = "less", paired=T)
+# p-value = 0.09 > alfa = 0.01
+# nid odrzucamy H0
+  
