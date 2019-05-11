@@ -1,17 +1,23 @@
 # 3.6
+# Ustalić, jak liczna powinna być próba, aby na jej podstawie można było oszacować
+# wzrost noworodków, jeżeli wiadomo, że ma on rozk lad normalny o odchyleniu standardowym 1,5 cm.
+# Przyja̧ć, że maksymalny błąd oszacowania średniego wzrostu na poziomie ufności 0,99 ma wynosić
+# 0,5 cm.
 sd <- 1.5
 # (1 - ALFA) = 0.99
-afla <- 1 - 0.99
+alfa <- 1 - 0.99
 d <- 0.5 # blad_oszacowania_sredniego 
 #(qt(1-alfa/2,length(WeightInitial)-1)*sd(WeightInitial)/0.5)^2
 #(qnorm(alfa))^2
 # przez analogie
-wzor <- (qnorm(1 -(afla/2) * sd/d))^2
+wzor <- (qnorm(1 -(alfa/2) * sd/d))^2
 wzor
 # n >= [1] 4.709292
     
 
 # 3.8
+# Jak duża̧ próbę należy pobrać, aby z maksymalnym błędem 2,5% oszacować na poziomie
+# ufności 0,95 procent doros lych Polaków czytająych rocznie przynajmniej jedną książkę?
 d <- 0.025
 alfa <- 1 - 0.95
 # Cecha X (czyta vs nie czyta) ma rozklad dwupunktowy 
@@ -32,6 +38,9 @@ wzor4 <- ((qnorm(1 -(alfa/2))) * (1/(2*d)))^2
 
 
 # 3.9
+# Jak dużą próbę należy pobrać, aby z maksymalnym błędem 1% oszacować na poziomie
+# ufności 0,9 procent kierowców nie zapinaja̧cych pasów bezpieczeństwa? Uwzględnić rezultaty wstępnych
+# badań, z których wynika, że interesującą nas wielkość jest rzędu 16%.
 d <- 0.01
 alfa <- 1-0.9
 p_0 <- 0.16 # 16 % nie zapina pasów
@@ -49,10 +58,19 @@ wzor2 # [1] 3636.25
 
 
 # 3.4
-# A)
+# A) Napisać funkcję, która dla dużej próby losowej (n ≥ 100) z dowolnego rozkładu,
+# zwraca przedział ufności dla średniej na zadanym poziomie ufności. Zadbać by funkcja zwracała bła̧d
+# w przypadku jej użycia do próby o liczności mniejszej niż 100.
+# (b) W pakiecie MASS znajduje się zbiór danych geyser zawierająy kolumnę duration z czasami trwania
+# (w min) wybuchów gejzeru Old Faithful w Parku Narodowym Yellowstone w USA.
+# (b1) Sprawdzić czy można uznać, że rozkład czasu trwania wybuchu tego gejzeru jest normalny.
+# (b2) Na poziomie ufności 0,95 wyznaczyć przedział ufności dla średniego czasu trwania wybuchu
+# tego gejzeru.
+
 library(MASS)
 data(geyser)
 attach(geyser)
+
 
 View(geyser)
 # test shapiro 
